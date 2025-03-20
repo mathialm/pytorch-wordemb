@@ -121,6 +121,7 @@ VocabAndTensor load_word2vec(const char * filename){
 }
 
 VocabAndTensor load_word2vec_bin(const char * filename){
+    using namespace torch::indexing;
     py::dict vocab;
 
     auto options = torch::TensorOptions()
@@ -142,14 +143,22 @@ VocabAndTensor load_word2vec_bin(const char * filename){
         float * const data = static_cast<float * const>(dest.storage().data());
         for( size_t i = 0; i < n_word; i++ ){
 
-            float *vector = data + dim * i;
+            float vector[dim];
 
             fscanf(fp, "%s", buf );
             vocab[ py::str(buf) ] = py::int_(i);
 
             fgetc(fp); // delete ' '
 
-            fread( vector, sizeof(float), dim, fp );
+            
+            for( size_t j=0; j<dim; j++){
+                float value;
+                fscanf(fp, "%f", *value);
+                dest.index_put_({i, j}, value)
+            }
+
+            //fread( *vector, sizeof(float), dim, fp );
+            
         }
         
         fclose(fp);
