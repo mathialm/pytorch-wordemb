@@ -68,7 +68,7 @@ VocabAndTensor load_glove(const char * filename){
 
         for( size_t i = 0; i < n_word; i++ ){
 
-            float *vector = data + dim * i;
+            const float *vector = data + dim * i;
 
             fscanf(fp, "%s", buf );
             vocab[ py::str(buf) ] = py::int_(i);
@@ -105,7 +105,7 @@ VocabAndTensor load_word2vec(const char * filename){
 
         for( size_t i = 0; i < n_word; i++ ){
 
-            float *vector = data + dim * i;
+            const float *vector = data + dim * i;
 
             fscanf(fp, "%s", buf );
             vocab[ py::str(buf) ] = py::int_(i);
@@ -142,7 +142,7 @@ VocabAndTensor load_word2vec_bin(const char * filename){
         const float * data = static_cast<const float*>(dest.storage().data());
         for( size_t i = 0; i < n_word; i++ ){
 
-            float *vector = data + dim * i;
+            const float *vector = data + dim * i;
 
             fscanf(fp, "%s", buf );
             vocab[ py::str(buf) ] = py::int_(i);
